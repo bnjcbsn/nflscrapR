@@ -19,16 +19,13 @@
 #' # All games in 2015 Season
 #' season_games(2015) # Will output a dataframe
 #' @export
-season_games <- function(Season, Weeks = 16) {
+season_games <- function(Season, Weeks = 17) {
   
   game_ids <- extracting_gameids(Season)
   
-  # If statement to specify the week variable
-  if (Weeks %in% 4:13) {
-    game_ids <- game_ids[1:(16*Weeks)-1]
-  } else if (Weeks %in% c(1:3, 14:15)) {
-    game_ids <- game_ids[1:(16*Weeks)]
-  }
+  game_weeks <- get_gameweeks()
+  
+  game_ids <- game_ids[game_weeks<=Weeks]
   
   game_urls <- sapply(game_ids, proper_jsonurl_formatting)
   
@@ -102,4 +99,21 @@ season_rosters <- function(Season, Weeks = 16, TeamInt) {
   
   # Output Dataframe
   team.roster
+}
+
+#' Extract week numbers of the season for each game in a given NFL season
+#' @description This function is a helper for filtering 
+#' @return A vector of NFL week numbers, corresponding to game_ids, from the specified season
+#' @examples
+#' game_ids <- extracting_gameids(Season)
+#' game_weeks <- get_gameweeks()
+#' @export
+get_gameweeks <- function(){
+  games <- dplyr::data_frame(game_ids)
+  games$game.date <- lubridate::ymd(substr(games$game_ids, 1, 8))
+  games$calweek <- lubridate::isoweek(games$game.date-3)
+  games$wday <- lubridate::wday(games$game.date, label = TRUE)
+  games$season.week <- games$calweek - (min(games$calweek)-1)
+  gameweeks <- games$calweek - (min(games$calweek)-1)
+  gameweeks
 }
