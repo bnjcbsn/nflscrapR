@@ -111,10 +111,16 @@ season_rosters <- function(Season, Weeks = 17, TeamInt) {
 get_gameweeks <- function(Season){
   game_ids <- extracting_gameids(Season)
   games <- dplyr::data_frame(game_ids)
+  # parse game date from game_id
   games$game.date <- lubridate::ymd(substr(games$game_ids, 1, 8))
-  games$calweek <- lubridate::isoweek(games$game.date-3)
+  # calc calendar week, adjust for a Thursday beg week, and pre-date 12
+  # weeks to keep seasons together, -3 days, -84 days
+  games$calweek <- lubridate::isoweek(games$game.date-87)
+  # no value, used in testing
   games$wday <- lubridate::wday(games$game.date, label = TRUE)
+  # use calendar week values to determine seasonweek
   games$season.week <- games$calweek - (min(games$calweek)-1)
+  # repeat method to populate vector
   gameweeks <- games$calweek - (min(games$calweek)-1)
   gameweeks
 }
