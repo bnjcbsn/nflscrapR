@@ -23,7 +23,7 @@ season_games <- function(Season, Weeks = 17) {
   
   game_ids <- extracting_gameids(Season)
   
-  game_weeks <- get_gameweeks()
+  game_weeks <- get_gameweeks(Season)
   
   game_ids <- game_ids[game_weeks<=Weeks]
   
@@ -108,7 +108,8 @@ season_rosters <- function(Season, Weeks = 16, TeamInt) {
 #' game_ids <- extracting_gameids(Season)
 #' game_weeks <- get_gameweeks()
 #' @export
-get_gameweeks <- function(){
+get_gameweeks <- function(Season){
+  game_ids <- extracting_gameids(Season)
   games <- dplyr::data_frame(game_ids)
   games$game.date <- lubridate::ymd(substr(games$game_ids, 1, 8))
   games$calweek <- lubridate::isoweek(games$game.date-3)
