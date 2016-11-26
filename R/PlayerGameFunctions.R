@@ -376,15 +376,13 @@ player_game <- function(GameID) {
 #' library(ggplot2)
 #' ggplot(playerstats.2010, aes(x = PlayType)) + geom_bar()
 #' @export
-season_player_game <- function(Season, Weeks = 16) {
+season_player_game <- function(Season, Weeks = 17) {
   
   game_ids <- extracting_gameids(Season)
   
-  if (Weeks %in% 3:15) {
-    game_ids <- game_ids[1:(16*Weeks)-1]
-  } else if (Weeks %in% 1:2) {
-    game_ids <- game_ids[1:(16*Weeks)]
-  }
+  game_weeks <- get_gameweeks(Season)
+  
+  game_ids <- game_ids[game_weeks<=Weeks]
   
   playergame.season.unformatted <- lapply(game_ids, FUN = player_game)
   

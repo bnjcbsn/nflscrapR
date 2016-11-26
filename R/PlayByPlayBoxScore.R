@@ -1182,18 +1182,16 @@ game_play_by_play <- function(GameID) {
 #' # Looking at all Baltimore Ravens Offensive Plays 
 #' subset(pbp.data.2010, posteam = "BAL")
 #' @export
-season_play_by_play <- function(Season, Weeks = 16) {
+season_play_by_play <- function(Season, Weeks = 17) {
   # Google R stlye format
   
   # Below the function put together the proper URLs for each game in each 
   # season and runs the game_play_by_play function across the entire season
   game_ids <- extracting_gameids(Season)
   
-  if (Weeks %in% 3:15) {
-    game_ids <- game_ids[1:(16*Weeks)-1]
-  } else if (Weeks %in% 1:2) {
-    game_ids <- game_ids[1:(16*Weeks)]
-  }
+  game_weeks <- get_gameweeks(Season)
+  
+  game_ids <- game_ids[game_weeks<=Weeks]
   
   pbp_data_unformatted <- lapply(game_ids, FUN = game_play_by_play)
   

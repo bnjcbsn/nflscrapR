@@ -85,7 +85,7 @@ season_games <- function(Season, Weeks = 17) {
 #' # Roster for Baltimore Ravens in 2013
 #' season_rosters(2013, TeamInt = "BAL") 
 #' @export
-season_rosters <- function(Season, Weeks = 16, TeamInt) {
+season_rosters <- function(Season, Weeks = 17, TeamInt) {
   
   # Use the season_playergame to gather all names of players on a given team
   team.roster.s1 <- subset(season_player_game(Season, Weeks = Weeks), 
