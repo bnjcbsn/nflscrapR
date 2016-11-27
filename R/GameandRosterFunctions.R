@@ -115,6 +115,7 @@ get_gameweeks <- function(Season){
   games$game.date <- lubridate::ymd(substr(games$game_ids, 1, 8))
   # calc calendar week, adjust for a Thursday beg week, and pre-date 12
   # weeks to keep seasons together, -3 days, -84 days
+  # -0 days = Monday start week, -1 days equals Tuesday, etc
   games$calweek <- lubridate::isoweek(games$game.date-87)
   # no value, used in testing
   games$wday <- lubridate::wday(games$game.date, label = TRUE)
